@@ -1,0 +1,34 @@
+btc-node-1-1:
+    restart: always
+    image: jvlythical/bitcoind
+    volumes:
+        - ./volumes/node-1-1:/bitcoin/.bitcoin/regtest
+        #- ./btc_init:/usr/local/bin/btc_init
+        - ./../../build/src:/sbin/bitcoin
+    container_name: btc-node-1-1
+    cpu_shares: 100
+
+btc-node-1-2:
+    restart: always
+    image: jvlythical/bitcoind
+    volumes:
+        - ./volumes/node-1-2:/bitcoin/.bitcoin/regtest
+        #- ./btc_init:/usr/local/bin/btc_init
+        - ./../../build/src:/sbin/bitcoin
+    container_name: btc-node-1-2
+    cpu_shares: 100
+
+btc-leader-1:
+    restart: always
+    image: jvlythical/bitcoind
+    volumes:
+        - ./volumes/node-1:/bitcoin/.bitcoin/regtest
+        #- ./btc_init:/usr/local/bin/btc_init
+        - ./../../build/src:/sbin/bitcoin
+    container_name: btc-leader-1
+    cpu_shares: 100
+    environment:
+        - IS_BTC_LEADER=true
+    links: 
+        - "btc-node-1-1"
+        - "btc-node-1-2"

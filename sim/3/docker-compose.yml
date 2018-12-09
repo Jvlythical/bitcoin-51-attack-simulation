@@ -1,0 +1,9 @@
+btc-leader-3:
+    restart: always
+    image: jvlythical/bitcoind
+    volumes:
+        - ./volumes/node-6:/bitcoin/.bitcoin/regtest
+        #- ./btc_init:/usr/local/bin/btc_init
+        - ./../../build/src:/sbin/bitcoin
+    container_name: btc-leader-3
+    cpu_shares: 100
