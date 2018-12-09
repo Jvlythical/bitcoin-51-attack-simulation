@@ -6,5 +6,5 @@
 # Getting Started
 
 ```
-sh run.sh
+sh setup.sh
 ```
