@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Muwei
-#This script mimics a mining process.
+#This script mimics a selfish mining process.
 #This is a version for leader in a 
 #mining pool.
 
@@ -12,23 +12,42 @@ getcurrent(){
 
 #define a function to initialize a new mining
 reset(){
-	current=$block
+	delta=$block
 	kick=0
 	nounce=$RANDOM
 	echo 'working' > ~/msg
 }
 
+#define a function to check our current state if we are aheading or not
+checkdelta(){
+	getcurrent
+	delta=$((delta + 1))
+	if [ "$delta" -gt $((block + 1)) ]; then
+		bitcoin-cli generate 1
+		kick=0
+		nounce=$RANDOM
+		echo 'working' > ~/msg
+		getcurrent
+	else
+		kick=0
+		nounce=$RANDOM
+		echo 'working' > ~/msg
+		echo "current difference is $((delta - block))"
+	fi
+
+}
 
 #Get info from a working block
 block="0"
 getcurrent
-current=$block
+delta=$block
 
 #Initialize the counts and nounce and difficulty
 kick=0
 nounce=$RANDOM
 level=4
 fre=200
+delta=0
 
 
 #Read user parameter
@@ -66,7 +85,11 @@ done
 
 
 #Continuously mine the next block
-echo "Start mining as a leader..."
+echo "Start selfish mining as a leader..."
+echo ""
+
+echo "Initial private chain length is: $delta "
+echo "Initial public chain length is: $block "
 echo ""
 
 while true
@@ -74,22 +97,19 @@ do
 	#check if competitors solve block,
 	#if they do, reset the mining
 	getcurrent
-	if [ "$current" != "$block" ]
+	if [ "$delta" -lt "$block" ]
 	then
 		reset
 	fi
 
 	#check if a partner already solve
 	#the puzzle.
-	if [ $(cat ~/msg) = 'done' ]
+	if [ "$(cat ~/msg)" == "done" ]
 	then
 		#generate a new block
-		bitcoin-cli -regtest generate 1
+		checkdelta
 		echo 'partner solved'
 		date
-
-		#reset mining
-		reset
 		echo ''
 	fi
 
@@ -107,20 +127,10 @@ do
 			
 			if [ "$check" == "$goal"  ]
 			then
-				#check if already been solved
-				getcurrent
-				if [ "$current" != "$block" ];then
-					reset
-					break
-				fi
-
 				#generate a new block
-				bitcoin-cli -regtest generate 1
+				checkdelta
 				echo "leader solved"
 				date
-
-				#reset mining
-				reset
 				echo ''
 
 				#break the loop

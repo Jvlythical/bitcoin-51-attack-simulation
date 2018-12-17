@@ -10,10 +10,9 @@ while true
 do
 	nc -kl -p $port | while read -n 4
 	do
-	    if [ $REPLY = 'done' ] 
+	    if [ "$REPLY" = "done" ] 
 			then
-				echo 'done' > msg
-				echo 'msg changed'
+				echo 'done' > ~/msg
 	    fi
 	done 
 done

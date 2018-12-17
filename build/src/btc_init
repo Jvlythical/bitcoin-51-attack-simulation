@@ -18,9 +18,9 @@ EOF
 	
 	# Add additional configurations
 	echo "regtest=1" >> $HOME/.bitcoin/bitcoin.conf
-	if [ -z "$IS_BTC_LEADER" ]; then
-		echo "connect=$BTC_NODE_1_PORT_18332_TCP_ADDR:18444" >> .bitcoin/bitcoin.conf
-	fi
+	#if [ -z "$IS_BTC_LEADER" ]; then
+	#	echo "connect=$BTC_NODE_1_PORT_18332_TCP_ADDR:18444" >> .bitcoin/bitcoin.conf
+	#fi
 
 fi
 
