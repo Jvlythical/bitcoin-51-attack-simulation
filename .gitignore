@@ -1,3 +1,4 @@
 sim/*/volumes
 build/src/msg
 *.swp
+*.txt
