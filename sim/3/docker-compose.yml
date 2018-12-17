@@ -1,3 +1,13 @@
+btc-node-3-1:
+    restart: always
+    image: jvlythical/bitcoind
+    volumes:
+        - ./volumes/node-2-1:/bitcoin/.bitcoin/regtest
+        #- ./btc_init:/usr/local/bin/btc_init
+        - ./../../build/src:/sbin/bitcoin
+    container_name: btc-node-3-1
+    cpu_shares: 100
+
 btc-leader-3:
     restart: always
     image: jvlythical/bitcoind
@@ -7,3 +17,5 @@ btc-leader-3:
         - ./../../build/src:/sbin/bitcoin
     container_name: btc-leader-3
     cpu_shares: 100
+    links: 
+        - "btc-node-3-1"
