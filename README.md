@@ -5,6 +5,18 @@
 
 # Getting Started
 
+
+## Normal
 ```
-sh setup.sh
+sh demo.sh normal
+```
+
+## Attack
+```
+sh demo.sh attack
+```
+
+## Self
+```
+sh demo.sh selfish
 ```
